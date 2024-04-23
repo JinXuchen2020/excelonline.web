@@ -3,9 +3,9 @@ import '../styles/Main.css';
 import { Layout, Menu, Tooltip } from 'antd';
 import { useNavigate, Outlet, useSearchParams } from 'react-router-dom'
 import { MenuInfo, MenuClickEventHandler }  from 'rc-menu/lib/interface'
-import { ConfirmModal, HeaderCtl } from 'components';
+import { HeaderCtl } from 'components';
 import { useLocation } from 'react-router';
-import { IEnterpriseUserRspModel, ITokenRspModel, USER_PROFILE } from 'models';
+import { ITokenRspModel, IUserRspModel, USER_PROFILE } from 'models';
 import moment from 'moment';
 
 const { Header, Content, Sider } = Layout;
@@ -17,7 +17,7 @@ export const Main : FunctionComponent = () => {
 
   const [activeKey, setActiveKey] = useState<string>();
 
-  const [userModel, setUserModel] = useState<IEnterpriseUserRspModel>();
+  const [userModel, setUserModel] = useState<IUserRspModel>();
 
   const [userTokenString, setUserTokenString] = useState<string>();
 
@@ -36,7 +36,7 @@ export const Main : FunctionComponent = () => {
       setUserTokenString(tokenString)
     }
     else {
-      navigate('/login')
+      // navigate('/login')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[searchParams])
@@ -72,7 +72,7 @@ export const Main : FunctionComponent = () => {
   return (
     <Layout>
       <Header className="site-layout-background">
-        <HeaderCtl currentUser={userModel} />
+        <HeaderCtl dataSource={userModel} />
       </Header>
       <Layout>
         <Sider 
@@ -88,16 +88,19 @@ export const Main : FunctionComponent = () => {
             selectedKeys={[activeKey!]}
             style={{ height: '100%', borderRight: 0, textAlign: 'center' }}
           > 
+            <Menu.Item key="/saleInfos">
+              销售信息
+            </Menu.Item>
             {
-              userModel && userModel.managementModules.length > 0 ? userModel.managementModules.sort((a, b) => a.sequence - b.sequence).map(c=> (
-                <Menu.Item key={c.key}>
-                  {c.name}
+              userModel && userModel.role === "admin" && (                
+                <Menu.Item key="/users">
+                  用户信息
                 </Menu.Item>
-              )) : undefined
+              )
             }
           </Menu>
         </Sider>
-        <Layout style={{ padding: '14px' }}>
+        <Layout style={{ padding: '10px' }}>
           <Content
             className="site-layout-background"
             onScroll={(e) => {              
@@ -107,7 +110,7 @@ export const Main : FunctionComponent = () => {
               padding: 14,
               margin: 0,
               overflow: 'auto',
-              height: 'calc(100vh - 130px)',
+              height: 'calc(100vh - 100px)',
             }}
           > 
             <Outlet />

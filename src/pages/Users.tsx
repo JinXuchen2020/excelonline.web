@@ -17,7 +17,7 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const changeUsers = async (page: number, pageSize: number) => {
+  const handlePageChange = async (page: number, pageSize: number) => {
     setCurrentPage(page);
   };
 
@@ -30,19 +30,6 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
       }
       setIsLoading(false);
     });
-  };
-
-  const handleDownload = () => {
-    if (userModels) {
-      const query: Partial<IUserQueryOption> = queryString.parse(
-        searchParams.toString()
-      );
-      UserService.downloadUsers(query).then((rsp) => {
-        if (rsp) {
-          fileDownload(rsp, "用户数据.xlsx");
-        }
-      });
-    }
   };
 
   useEffect(() => {
@@ -58,8 +45,8 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
   return (
     <>
       <Loading loading={isLoading} spinTip={loadingTip} />
-      <Row style={{ marginTop: 10 }}>
-        <Col offset={1} span={22}>
+      <Row>
+        <Col>
           <Row>
             <Col span={18}>
               <TableSearch
@@ -69,25 +56,14 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
                 handleRefresh={() => setCurrentPage(1)}
               />
             </Col>
-            <Col span={6}>
-              <Space style={{ float: "right" }}>
-                <Button
-                  hidden={handleSelect !== undefined}
-                  type="primary"
-                  onClick={handleDownload}
-                >
-                  下载数据
-                </Button>
-              </Space>
-            </Col>
           </Row>
           <Row style={{ marginTop: 10 }}>
             <Col>
               <UserTable
                 handleSelect={handleSelect}
-                currentUsers={userModels}
+                dataSource={userModels}
                 loading={false}
-                handlePageChange={changeUsers}
+                handlePageChange={handlePageChange}
                 currentPage={currentPage}
               />
             </Col>

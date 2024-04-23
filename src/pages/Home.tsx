@@ -4,7 +4,7 @@ export const Home : FunctionComponent = ()=> {
   return (
     <>
       <div className="preview-result">
-        蔡司资源管理系统
+        销售报备信息
       </div>
     </>    
   );

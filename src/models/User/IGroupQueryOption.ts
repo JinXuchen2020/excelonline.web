@@ -1,3 +1,5 @@
 export interface IGroupQueryOption {
-  name: string
+  companyName: string,
+  pageNo: number,
+  pageSize: number
 }

@@ -1,16 +1,17 @@
 import { Button, Col, Row, Space, Tabs } from "antd";
 import {
   SaleStatusTable,
-  Loading
+  Loading,
+  TableSearch
 } from "components";
 import {
   ISaleStatusListRspModel,
   ISaleStatusRspModel,
-  IUserQueryOption,
+  IGroupQueryOption,
 } from "models";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { GroupService } from "services";
+import { SaleInfoService } from "services";
 import fileDownload from "js-file-download";
 import queryString from "query-string";
 
@@ -39,17 +40,17 @@ export const GroupsV2: FunctionComponent = () => {
   };
 
   const handleDownload = () => {
-    GroupService.downloadGroupManagers().then((rsp) => {
+    SaleInfoService.downloadSaleInfos().then((rsp) => {
       if (rsp) {
-        fileDownload(rsp, "组长使用情况.xlsx");
+        fileDownload(rsp, "销售报备信息.xlsx");
       }
     });
   };
 
-  const handleRefresh = (query: Partial<IUserQueryOption>) => {
+  const handleRefresh = (query: Partial<IGroupQueryOption>) => {
     setIsLoading(true);
     setLoadingTip("加载信息...");
-    GroupService.getGroupManagers(query).then((rsp) => {
+    SaleInfoService.getSaleInfos(query).then((rsp) => {
       if (rsp && rsp instanceof Array) {
         setSaleInfos(rsp);
       }
@@ -59,7 +60,7 @@ export const GroupsV2: FunctionComponent = () => {
   };
 
   useEffect(() => {
-    const query: Partial<IUserQueryOption> = queryString.parse(
+    const query: Partial<IGroupQueryOption> = queryString.parse(
       searchParams.toString()
     );
     query.pageNo = currentPage
@@ -70,9 +71,37 @@ export const GroupsV2: FunctionComponent = () => {
   return (
     <>
       <Loading loading={isLoading} spinTip={loadingTip} />
-      <Row style={{ marginTop: 10 }}>
-        <Col offset={1} span={22}>
-          <SaleStatusTable currentGroups={saleInfos} loading={false} handleSelect={handleSelect} handlePageChange={handlePageChange} currentPage={currentPage} />
+      <Row>
+        <Col>
+          <Row gutter={24}>
+            <Col span={18}>
+              <TableSearch
+                optionKey={"companyName"}
+                placeholder={"请输入公司名称"}
+                buttonText={"查找"}
+              />
+            </Col>
+            <Col span={6}>
+              <Space style={{ float: "right" }}>
+                <Button type="primary" onClick={handleCreate}>
+                  新建销售
+                </Button>
+                <Button type="primary" onClick={handleDownload}>
+                  下载数据
+                </Button>
+              </Space>
+            </Col>
+          </Row>
+          <Row style={{ marginTop: 10 }}>
+            <Col>
+              <SaleStatusTable 
+                dataSource={saleInfos} 
+                loading={false} 
+                handleSelect={handleSelect} 
+                handlePageChange={handlePageChange} 
+                currentPage={currentPage} />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </>

@@ -1,23 +1,20 @@
 import { Button, Col, Form, Row } from 'antd';
-import { ConfirmModal, CourseSelectTable, SaleStatusForm, SaleStatusTable, Loading } from 'components';
-import { ICourseRspModel, IGroupManagerCourseReqModel, ISaleStatusReqModel, IGroupManagerStatusRspModel, ISaleStatusRspModel, isOfType, IUserRspModel } from 'models';
-import { GroupSelectCourse, Users } from 'pages';
+import { SaleStatusForm, SaleStatusTable, Loading } from 'components';
+import { ISaleStatusReqModel,  ISaleStatusRspModel, isOfType, IUserRspModel } from 'models';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { GroupService, UserService } from 'services';
+import { SaleInfoService, UserService } from 'services';
 import { LeftOutlined} from '@ant-design/icons';
 
 export type Flag = "Base" | "SelectUser" | "SelectCourse" | "GroupStatus" | "SwitchManager" | "CourseStatus";
 export const GroupManage : FunctionComponent = () => {
-  let { managerId } = useParams();
+  let { id } = useParams();
   const [, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
   const [form] = Form.useForm()
 
   const [dataModel, setDataModel] = useState<ISaleStatusRspModel>();
-
-  const [deleteCourses, setDeleteCourses] = useState<ICourseRspModel[]>([]);
 
   const [pageFlag, setPageFlag] = useState<Flag>("Base");  
 
@@ -26,10 +23,10 @@ export const GroupManage : FunctionComponent = () => {
 
   const [isEditing, setIsEditing] = useState(false)
 
-  let groupManager = dataModel!
+  let modelInstance = dataModel!
 
-  const setGroupManager = (groupManagerProps: Partial<IGroupManagerStatusRspModel>) => {
-    setDataModel({ ...groupManager, ...groupManagerProps });
+  const handleUpdate = (props: Partial<ISaleStatusRspModel>) => {
+    setDataModel({ ...modelInstance, ...props });
     setIsEditing(true)
   }
 
@@ -43,15 +40,15 @@ export const GroupManage : FunctionComponent = () => {
         setIsLoading(true)
         setLoadingTip("保存...")  
         if(dataModel.id) {
-          GroupService.updateGroupManager(dataModel.manager.id, input).then(()=> {
+          SaleInfoService.updateSaleStatus(dataModel.id, input).then(()=> {
             setIsLoading(false)
-            navigate("/groups")
+            navigate("/saleInfos")
           })
         }
         else {
-          GroupService.addGroupManager(input).then(()=> {
+          SaleInfoService.addSaleStatus(input).then(()=> {
             setIsLoading(false)
-            navigate("/groups")
+            navigate("/saleInfos")
           })
         }
       }
@@ -60,29 +57,38 @@ export const GroupManage : FunctionComponent = () => {
     })    
   }
 
+  const handleBack = () => {
+    navigate("/saleInfos")
+  }
+
+  const backBtnLabel = () => {
+    return id ? "编辑销售信息" : "新建销售信息";
+  }
+
   useEffect(()=>{
-    if(managerId) {
+    if(id) {
       UserService.setErrorHandler()
       setIsLoading(true)
       setLoadingTip("加载详情...")
-      GroupService.getGroupManager(managerId).then(rsp=> {
-        if(rsp && rsp.manager) {
+      SaleInfoService.getSaleStatus(id).then(rsp=> {
+        if(rsp) {
           setDataModel(rsp)
         }
 
         setIsLoading(false)
       })
     }
-  }, [managerId])
+  }, [id])
 
   return (
     <>
       <Loading loading={isLoading} spinTip={loadingTip} />
+      <Button type="text" icon ={<LeftOutlined />} onClick={handleBack}>{backBtnLabel()}</Button>
       <SaleStatusForm 
-          form={form}
-          dataSource ={dataModel} 
-          handleUpdate={setGroupManager}
-          handleSave={handleSave} />      
+        form={form}
+        dataSource ={dataModel} 
+        handleUpdate={handleUpdate}
+        handleSave={handleSave} />
     </>
   );
 }
