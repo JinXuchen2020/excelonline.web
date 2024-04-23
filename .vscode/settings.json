@@ -1,0 +1,4 @@
+{
+    "appService.deploySubpath": "build",
+    "appService.defaultWebAppToDeploy": "/subscriptions/a2035827-3d2b-4079-a2a2-45cb1b325a96/resourceGroups/CZ-CN20-R02-CE2-T-WeChat-TestFarm/providers/Microsoft.Web/sites/czcn20r02wa121"
+}
