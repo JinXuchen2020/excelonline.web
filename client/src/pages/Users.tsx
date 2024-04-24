@@ -36,6 +36,9 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
     const query: Partial<IUserQueryOption> = queryString.parse(
       searchParams.toString()
     );
+    if (query.phoneNumber) {
+      query.name = query.phoneNumber;
+    }
     query.pageNo = currentPage;
     query.pageSize = 10;
     refresh(query);

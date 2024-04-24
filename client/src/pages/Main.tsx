@@ -36,7 +36,7 @@ export const Main : FunctionComponent = () => {
       setUserTokenString(tokenString)
     }
     else {
-      // navigate('/login')
+      navigate('/login')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[searchParams])

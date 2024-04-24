@@ -22,7 +22,7 @@ export const HeaderCtl: React.FunctionComponent<{dataSource: IUserRspModel | und
   return (
     <>
       <Row>
-        <Col xs={0} sm={12}>
+        <Col xs={0} sm={24}>
           <Space style={{float: 'right', cursor:'pointer'}} onClick={() => setShowProfile(true)}>
             {
               dataSource === undefined ? undefined
@@ -34,7 +34,7 @@ export const HeaderCtl: React.FunctionComponent<{dataSource: IUserRspModel | und
             }
           </Space>
         </Col>
-        <Col xs={12} sm={0}>
+        <Col xs={24} sm={0}>
           <Space style={{float: 'right', cursor:'pointer'}} onClick={() => setShowProfile(true)}>
             {
               dataSource === undefined ? undefined
