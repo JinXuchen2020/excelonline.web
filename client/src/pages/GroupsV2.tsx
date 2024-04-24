@@ -8,6 +8,8 @@ import {
   ISaleStatusListRspModel,
   ISaleStatusRspModel,
   IGroupQueryOption,
+  ITokenRspModel,
+  USER_PROFILE,
 } from "models";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -31,8 +33,13 @@ export const GroupsV2: FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingTip, setLoadingTip] = useState<string>();
 
-  const handleSelect = (selected: ISaleStatusRspModel) => {
-    navigate(`/saleInfos/${selected.id}`);
+  const handleSelect = (selected: ISaleStatusRspModel, actionType: string) => {
+    if (actionType === "view") {  
+      navigate(`/saleInfos/${selected.id}`);
+    }
+    else {
+      console.log(selected, actionType);
+    }
   };
 
   const handleCreate = () => {
@@ -51,7 +58,7 @@ export const GroupsV2: FunctionComponent = () => {
     setIsLoading(true);
     setLoadingTip("加载信息...");
     SaleInfoService.getSaleInfos(query).then((rsp) => {
-      if (rsp && rsp instanceof Array) {
+      if (rsp && rsp.data instanceof Array) {
         setSaleInfos(rsp);
       }
 
@@ -64,7 +71,12 @@ export const GroupsV2: FunctionComponent = () => {
       searchParams.toString()
     );
     query.pageNo = currentPage
-    query.pageSize= 10
+    query.pageSize = 10
+    const tokenString = sessionStorage.getItem(USER_PROFILE)!
+    const userToken = JSON.parse(tokenString) as ITokenRspModel
+    if (userToken.user.role !== 'admin') {
+      query.salerName = userToken.user.name
+    }
     handleRefresh(query);
   }, [searchParams, currentPage]);
 

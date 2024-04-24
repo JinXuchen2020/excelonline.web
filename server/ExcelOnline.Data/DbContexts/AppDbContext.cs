@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Reflection.Emit;
 
 namespace ExcelOnline.Data.DbContexts
 {
@@ -20,7 +21,14 @@ namespace ExcelOnline.Data.DbContexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<User>();
+            builder.Entity<User>()
+                    .Property(u => u.Id)
+                    .UseIdentityColumn()
+                    .ValueGeneratedOnAdd();
+            builder.Entity<SaleStatus>()
+                    .Property(u => u.Id)
+                    .UseIdentityColumn()
+                    .ValueGeneratedOnAdd();
             builder.Entity<SaleStatus>()
                 .Property(c=> c.LinkUpDate).HasColumnType("datetime");
             builder.Entity<SaleStatus>()

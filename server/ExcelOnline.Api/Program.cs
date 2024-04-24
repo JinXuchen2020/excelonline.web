@@ -78,7 +78,7 @@ builder.Services.AddAuthentication(auth =>
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-               options.UseSqlServer(builder.Configuration.GetConnectionString("SaleInfo") ?? string.Empty, c=>c.UseRowNumberForPaging()));
+               options.UseMySQL(builder.Configuration.GetConnectionString("SaleInfo") ?? string.Empty));
 
 builder.Services.AddAutoMapper(typeof(TransfersMappingProfile));
 

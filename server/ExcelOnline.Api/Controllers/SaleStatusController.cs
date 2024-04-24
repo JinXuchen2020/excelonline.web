@@ -37,6 +37,8 @@ namespace ExcelOnline.Api.Controllers
         public async Task<ActionResult<SaleStatusTransOut>> GetSaleInfo(int id)
         {
             var result = await this.saleStatusService.GetSaleStatus(id);
+            result.IsEditing = true;
+            await this.saleStatusService.UpdateSaleStatus(result);
             var resultTransOut = this.mapper.Map<SaleStatusTransOut>(result);
 
             return Ok(resultTransOut);
@@ -55,6 +57,7 @@ namespace ExcelOnline.Api.Controllers
         {
             var result = this.mapper.Map<SaleStatus>(transIn);
             result.Id = id;
+            result.IsEditing = false;
             await this.saleStatusService.UpdateSaleStatus(result);
             return Ok();
         }

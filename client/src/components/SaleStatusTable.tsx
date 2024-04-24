@@ -1,4 +1,4 @@
-import { Button, Table } from "antd"
+import { Button, Space, Table } from "antd"
 import React, { FunctionComponent } from "react";
 import { ISaleStatusListRspModel, ISaleStatusRspModel, IUserRspModel } from "models";
 import { ColumnsType } from "antd/lib/table";
@@ -143,17 +143,28 @@ export const SaleStatusTable : FunctionComponent<{
     },
     {
       title: "",
-      width: 60,
+      width: 120,
       key: "action",
       fixed: "right",
       render: (text, record) => (
-        <Button
-          size="small"
-          type="primary"
-          onClick={() => handleSelect(record)}
-        >
-          查看
-        </Button>
+        <Space>
+          <Button
+            size="small"
+            type="primary"
+            onClick={() => handleSelect(record, "view")}
+          >
+            查看
+          </Button>
+          <Button
+            size="small"
+            type="primary"
+            disabled={record.isEditing} 
+            onClick={() => handleSelect(record, "assign")}
+          >
+            分配
+          </Button>
+        </Space>
+        
       ),
     }
   ]
@@ -172,6 +183,12 @@ export const SaleStatusTable : FunctionComponent<{
           total: dataSource?.total,
         }}
         rowKey={(c) => c.id!}
+        rowClassName={(record, index) => {
+          if (record.isEditing) {
+            return "row-editing";
+          }
+          return "";
+        }}
         scroll={{ x: 1200 }}
         columns={columns}
       />

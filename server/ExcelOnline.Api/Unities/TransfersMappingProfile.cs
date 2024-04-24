@@ -10,13 +10,13 @@ namespace ExcelOnline.Api.Unities
         {
 
             CreateMap<SaleStatus, SaleStatusTransOut>()
-                .ForMember(dest => dest.LinkUpDate, opt => opt.MapFrom(x => x.LinkUpDate.HasValue ? x.LinkUpDate.Value.ToShortDateString() : string.Empty))
-                .ForMember(dest => dest.BidDate, opt => opt.MapFrom(x => x.BidDate.HasValue ? x.BidDate.Value.ToShortDateString() : string.Empty))
-                .ForMember(dest => dest.VisitDate, opt => opt.MapFrom(x => x.VisitDate.HasValue ? x.VisitDate.Value.ToShortDateString() : string.Empty))
-                .ForMember(dest => dest.BidConfirmDate, opt => opt.MapFrom(x => x.BidConfirmDate.HasValue ? x.BidConfirmDate.Value.ToShortDateString() : string.Empty))
-                .ForMember(dest => dest.ContractDate, opt => opt.MapFrom(x => x.ContractDate.HasValue ? x.ContractDate.Value.ToShortDateString() : string.Empty))
-                .ForMember(dest => dest.SendDate, opt => opt.MapFrom(x => x.SendDate.HasValue ? x.SendDate.Value.ToShortDateString() : string.Empty))
-                .ForMember(dest => dest.RemarkDate, opt => opt.MapFrom(x => x.RemarkDate.HasValue ? x.RemarkDate.Value.ToShortDateString() : string.Empty));
+                .ForMember(dest => dest.LinkUpDate, opt => opt.MapFrom(x => x.LinkUpDate.HasValue ? x.LinkUpDate.Value.ToString("yyyy-MM-dd") : null))
+                .ForMember(dest => dest.BidDate, opt => opt.MapFrom(x => x.BidDate.HasValue ? x.BidDate.Value.ToString("yyyy-MM-dd") : null))
+                .ForMember(dest => dest.VisitDate, opt => opt.MapFrom(x => x.VisitDate.HasValue ? x.VisitDate.Value.ToString("yyyy-MM-dd") : null))
+                .ForMember(dest => dest.BidConfirmDate, opt => opt.MapFrom(x => x.BidConfirmDate.HasValue ? x.BidConfirmDate.Value.ToString("yyyy-MM-dd") : null))
+                .ForMember(dest => dest.ContractDate, opt => opt.MapFrom(x => x.ContractDate.HasValue ? x.ContractDate.Value.ToString("yyyy-MM-dd") : null))
+                .ForMember(dest => dest.SendDate, opt => opt.MapFrom(x => x.SendDate.HasValue ? x.SendDate.Value.ToString("yyyy-MM-dd") : null))
+                .ForMember(dest => dest.RemarkDate, opt => opt.MapFrom(x => x.RemarkDate.HasValue ? x.RemarkDate.Value.ToString("yyyy-MM-dd") : null));
 
             CreateMap<SaleStatusTransIn, SaleStatus>();           
 

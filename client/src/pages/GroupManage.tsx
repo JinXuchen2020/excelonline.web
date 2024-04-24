@@ -58,7 +58,23 @@ export const GroupManage : FunctionComponent = () => {
   }
 
   const handleBack = () => {
-    navigate("/saleInfos")
+    if(dataModel) {
+      const input : ISaleStatusReqModel= {
+        ...dataModel
+      }
+
+      if (dataModel.id) {
+        SaleInfoService.updateSaleStatus(dataModel.id, input).then(()=> {
+          navigate("/saleInfos")
+        })
+      }
+      else {
+        navigate("/saleInfos")
+      }
+    }
+    else { 
+      navigate("/saleInfos")
+    }
   }
 
   const backBtnLabel = () => {

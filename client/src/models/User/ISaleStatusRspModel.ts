@@ -9,11 +9,12 @@ export interface ISaleStatusRspModel {
   contactJob: string,
   contactPhone: string,
   successfulRate: string,
-  linkUpDate: string,
-  bidDate: string,
-  visitDate: string,
-  bidConfirmDate: string,
-  contractDate: string,
-  sendDate: string,
-  remarkDate: string
+  linkUpDate: any,
+  bidDate: any,
+  visitDate: any,
+  bidConfirmDate: any,
+  contractDate: any,
+  sendDate: any,
+  remarkDate: any
+  isEditing: boolean
 }

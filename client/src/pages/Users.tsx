@@ -21,6 +21,9 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
     setCurrentPage(page);
   };
 
+  const handleCreate = () => {}
+    
+
   const refresh = (query: Partial<IUserQueryOption>) => {
     setIsLoading(true);
     setLoadingTip("加载用户...");
@@ -58,6 +61,13 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
                 buttonText={"查找"}
                 handleRefresh={() => setCurrentPage(1)}
               />
+            </Col>
+            <Col span={6}>
+              <Space style={{ float: "right" }}>
+                <Button type="primary" onClick={handleCreate}>
+                  新建用户
+                </Button>
+              </Space>
             </Col>
           </Row>
           <Row style={{ marginTop: 10 }}>
