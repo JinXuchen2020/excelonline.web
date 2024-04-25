@@ -2,6 +2,7 @@
 using ExcelOnline.Api.Options;
 using ExcelOnline.Api.Services;
 using ExcelOnline.Api.Transfers;
+using ExcelOnline.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,5 +41,23 @@ namespace ExcelOnline.Api.Controllers
 
             return Ok(userTransOut);
         }
+
+        [HttpGet("users/salerlist")]
+        public async Task<ActionResult<UserTransOut>> GetSalerList()
+        {
+            var users = await this.userService.GetUsers(new UserQueryOption());
+            var userTransOut = users.Where(c => c.Role == "saler").Select(i => this.mapper.Map<UserTransOut>(i)).ToList();
+
+            return Ok(userTransOut);
+        }
+
+        [HttpPost("users")]
+        public async Task<ActionResult> CreateUser([FromBody] UserTransIn transIn)
+        {
+            var result = this.mapper.Map<User>(transIn);
+            await this.userService.AddUser(result);
+            return Ok();
+        }
+
     }
 }

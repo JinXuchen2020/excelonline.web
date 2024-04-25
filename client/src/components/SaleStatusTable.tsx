@@ -158,7 +158,7 @@ export const SaleStatusTable : FunctionComponent<{
           <Button
             size="small"
             type="primary"
-            disabled={record.isEditing} 
+            disabled={record.isEditing } // || record.salerName?.length > 0 } 
             onClick={() => handleSelect(record, "assign")}
           >
             分配

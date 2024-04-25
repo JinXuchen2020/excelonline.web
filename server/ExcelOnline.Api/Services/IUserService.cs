@@ -9,5 +9,7 @@ namespace ExcelOnline.Api.Services
         Task<User?> GetUser(int id);
 
         Task<User?> GetUserByPhone(string phoneNumber);
+
+        Task AddUser(User input);
     }
 }

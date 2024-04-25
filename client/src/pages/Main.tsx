@@ -88,12 +88,12 @@ export const Main : FunctionComponent = () => {
             selectedKeys={[activeKey!]}
             style={{ height: '100%', borderRight: 0, textAlign: 'center' }}
           > 
-            <Menu.Item key="/saleInfos">
+            <Menu.Item key="saleInfos">
               销售信息
             </Menu.Item>
             {
               userModel && userModel.role === "admin" && (                
-                <Menu.Item key="/users">
+                <Menu.Item key="users">
                   用户信息
                 </Menu.Item>
               )

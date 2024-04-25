@@ -2,6 +2,7 @@
 using ExcelOnline.Api.Options;
 using ExcelOnline.Api.Services;
 using ExcelOnline.Api.Transfers;
+using ExcelOnline.Api.Unities;
 using ExcelOnline.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +16,16 @@ namespace ExcelOnline.Api.Controllers
     {
         private readonly IMapper mapper;
         private readonly ISaleStatusService saleStatusService;
+        private readonly IExcelService excelService;
 
         public SaleStatusController(
             IMapper mapper,
-            ISaleStatusService groupService)
+            IExcelService excelService,
+            ISaleStatusService saleStatusService)
         {
             this.mapper = mapper;
-            this.saleStatusService = groupService;
+            this.saleStatusService = saleStatusService;
+            this.excelService = excelService;
         }
 
         [HttpGet("saleInfos")]
@@ -67,6 +71,19 @@ namespace ExcelOnline.Api.Controllers
         {
             await this.saleStatusService.DeleteSaleStatus(id);
             return Ok();
+        }
+
+        [HttpPost("saleInfos/download")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<FileResult> DownloadSaleInfos()
+        {
+            var result = await this.saleStatusService.GetSaleInfos(new SaleQueryOption());
+            var fileResult = await excelService.CreateExcel<SaleStatus>(
+                "销售报备",
+                Constants.SaleStatusHeaders,
+                result);
+
+            return File(fileResult, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "销售报备.xlsx");
         }
     }
 }

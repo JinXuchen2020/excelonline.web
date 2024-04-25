@@ -28,7 +28,7 @@ export const HeaderCtl: React.FunctionComponent<{dataSource: IUserRspModel | und
               dataSource === undefined ? undefined
                 : (
                 <>
-                  <Avatar size="large" icon={<UserOutlined />} />
+                  <Avatar onClick={handleLoginOut} size="large" icon={<UserOutlined />} />
                   <label>{dataSource && dataSource.name}</label>
                 </>)
             }
@@ -40,7 +40,7 @@ export const HeaderCtl: React.FunctionComponent<{dataSource: IUserRspModel | und
               dataSource === undefined ? undefined
                 : (
                 <>
-                  <Avatar size="large" icon={<UserOutlined />} />
+                  <Avatar onClick={handleLoginOut} size="large" icon={<UserOutlined />} />
                 </>)
             }
           </Space>

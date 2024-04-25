@@ -1,4 +1,4 @@
-import { Button, Col, Row, Space, Tabs } from "antd";
+import { Button, Col, Form, Modal, Row, Select, Space, Tabs } from "antd";
 import {
   SaleStatusTable,
   Loading,
@@ -10,21 +10,26 @@ import {
   IGroupQueryOption,
   ITokenRspModel,
   USER_PROFILE,
+  ISaleStatusReqModel,
+  IUserRspModel,
 } from "models";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { SaleInfoService } from "services";
+import { SaleInfoService, UserService } from "services";
 import fileDownload from "js-file-download";
 import queryString from "query-string";
 
 export const GroupsV2: FunctionComponent = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [showUserModal, setShowUserModal] = useState(false);
 
-  const [saleInfos, setSaleInfos] =
-    useState<ISaleStatusListRspModel>();
+  const [saleInfos, setSaleInfos] = useState<ISaleStatusListRspModel>();
+
+  const [salerList, setSalerList] = useState<IUserRspModel[]>();
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [currentDataModel, setCurrentDataModel] = useState<ISaleStatusRspModel>()
 
   const handlePageChange = async (page: number, pageSize: number) => {
     setCurrentPage(page);
@@ -38,8 +43,26 @@ export const GroupsV2: FunctionComponent = () => {
       navigate(`/saleInfos/${selected.id}`);
     }
     else {
-      console.log(selected, actionType);
+      setShowUserModal(true)
+      setCurrentDataModel(selected)
     }
+  };
+
+  const handleAssign = (salerName: string) => {
+    if (currentDataModel) {
+      const input : ISaleStatusReqModel= {
+        ...currentDataModel,
+        salerName: salerName,
+      }
+  
+      setIsLoading(true)
+      setLoadingTip("保存...")  
+      SaleInfoService.updateSaleStatus(currentDataModel.id, input).then(()=> {
+        setIsLoading(false)
+        setShowUserModal(false)
+        handleRefresh({})
+      })
+    }    
   };
 
   const handleCreate = () => {
@@ -47,10 +70,13 @@ export const GroupsV2: FunctionComponent = () => {
   };
 
   const handleDownload = () => {
+    setIsLoading(true);
+    setLoadingTip("下载中...");
     SaleInfoService.downloadSaleInfos().then((rsp) => {
       if (rsp) {
         fileDownload(rsp, "销售报备信息.xlsx");
       }
+      setIsLoading(false);
     });
   };
 
@@ -79,6 +105,14 @@ export const GroupsV2: FunctionComponent = () => {
     }
     handleRefresh(query);
   }, [searchParams, currentPage]);
+
+  useEffect(() => {
+    UserService.getSalerList().then((rsp) => {
+      if (rsp && rsp instanceof Array) {
+        setSalerList(rsp);
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -116,6 +150,30 @@ export const GroupsV2: FunctionComponent = () => {
           </Row>
         </Col>
       </Row>
+      <Modal 
+        title="分配销售员" 
+        open={showUserModal}
+        centered={true}
+        destroyOnClose={true} 
+        footer={(null)} 
+        onCancel={()=> setShowUserModal(false)}
+      >
+        <Form
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 14 }}
+          layout="horizontal"
+        >
+          <Form.Item label="销售员" name="salerName" wrapperCol={{ span: 10 }}>            
+            <Select onChange={(val: any) => handleAssign(val)}>
+              {
+                salerList && salerList.map((item) => {
+                  return <Select.Option key={item.id} value={item.name}>{item.name}</Select.Option>
+                })
+              }
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 };

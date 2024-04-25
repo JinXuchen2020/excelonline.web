@@ -85,6 +85,7 @@ builder.Services.AddAutoMapper(typeof(TransfersMappingProfile));
 builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<ISaleStatusService, SaleStatusService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IExcelService, ExcelService>();
 
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient();

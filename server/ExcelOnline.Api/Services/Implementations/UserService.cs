@@ -47,6 +47,11 @@ namespace ExcelOnline.Api.Services.Implementations
         {
             return await this.repository.GetQuery<User>().Where(c => c.PhoneNumber == phoneNumber).FirstOrDefaultAsync();
         }
-        
+
+        public async Task AddUser(User input)
+        {
+            await repository.AddAsync(input);
+        }
+
     }
 }

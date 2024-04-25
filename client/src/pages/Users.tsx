@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Button, Col, Row, Space } from "antd";
-import { useSearchParams } from "react-router-dom";
+import { Button, Col, Row, Space, Modal } from "antd";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { UserService } from "services";
 import queryString from "query-string";
-import { IUserListRspModel, IUserQueryOption } from "models";
-import { Loading, TableSearch, UserTable } from "components";
+import { IUserListRspModel, IUserQueryOption, IUserReqModel, IUserRspModel } from "models";
+import { Loading, TableSearch, UserForm, UserTable } from "components";
 import fileDownload from "js-file-download";
 
-export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
-  handleSelect,
-}) => {
+export const Users: React.FunctionComponent = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const [userModels, setUserModels] = useState<IUserListRspModel>();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingTip, setLoadingTip] = useState<string>();
+  const [showUserModal, setShowUserModal] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -21,8 +21,30 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
     setCurrentPage(page);
   };
 
-  const handleCreate = () => {}
-    
+  const handleCreate = () => {
+    setShowUserModal(true);
+  }
+  
+  const handleSave = (dataModel: IUserRspModel) => {
+    if(dataModel) {
+      const input : IUserReqModel= {
+        ...dataModel
+      }
+
+      if(dataModel.id) {
+        UserService.putUser(dataModel.id, input).then(()=> {
+          navigate("/users")
+          setShowUserModal(false);
+        })
+      }
+      else {
+        UserService.addUser(input).then(()=> {
+          navigate("/users")
+          setShowUserModal(false);
+        })
+      }
+    }   
+  }
 
   const refresh = (query: Partial<IUserQueryOption>) => {
     setIsLoading(true);
@@ -73,7 +95,7 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
           <Row style={{ marginTop: 10 }}>
             <Col>
               <UserTable
-                handleSelect={handleSelect}
+                handleSelect={null}
                 dataSource={userModels}
                 loading={false}
                 handlePageChange={handlePageChange}
@@ -83,6 +105,16 @@ export const Users: React.FunctionComponent<{ handleSelect?: any }> = ({
           </Row>
         </Col>
       </Row>
+      <Modal 
+        title="创建用户" 
+        open={showUserModal}
+        centered={true}
+        destroyOnClose={true} 
+        footer={(null)} 
+        onCancel={()=> setShowUserModal(false)}
+      >
+        <UserForm handleSave={handleSave} />
+      </Modal>
     </>
   );
 };

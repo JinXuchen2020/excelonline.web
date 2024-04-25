@@ -4,3 +4,4 @@ export { Loading } from './Loading'
 export { TableSearch } from './TableSearch'
 export { HeaderCtl } from './Header';
 export { UserTable } from './UserTable';
+export { UserForm } from './UserForm';
