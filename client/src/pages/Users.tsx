@@ -33,13 +33,13 @@ export const Users: React.FunctionComponent = () => {
 
       if(dataModel.id) {
         UserService.putUser(dataModel.id, input).then(()=> {
-          navigate("/users")
+          refresh({})
           setShowUserModal(false);
         })
       }
       else {
         UserService.addUser(input).then(()=> {
-          navigate("/users")
+          refresh({})
           setShowUserModal(false);
         })
       }
