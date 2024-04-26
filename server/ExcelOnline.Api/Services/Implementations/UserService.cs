@@ -53,5 +53,23 @@ namespace ExcelOnline.Api.Services.Implementations
             await repository.AddAsync(input);
         }
 
+        public async Task<bool> ValidateUser(UserQueryOption option) 
+        {
+            var result = this.repository.GetQuery<User>();
+            if (!string.IsNullOrEmpty(option.PhoneNumber) && string.IsNullOrEmpty(option.Name))
+            {
+                result = result.Where(c => c.PhoneNumber == option.PhoneNumber);
+            }
+            else if (string.IsNullOrEmpty(option.PhoneNumber) && !string.IsNullOrEmpty(option.Name))
+            {
+                result = result.Where(c => c.Name == option.Name);
+            }
+            else 
+            {
+                result = result.Where(c => c.Name == option.Name || c.PhoneNumber == option.PhoneNumber);
+            }
+
+            return (await result.FirstOrDefaultAsync()) != null; 
+        }
     }
 }

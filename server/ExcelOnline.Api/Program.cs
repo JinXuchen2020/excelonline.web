@@ -5,6 +5,9 @@ using ExcelOnline.Api.Unities;
 using ExcelOnline.Data.DbContexts;
 using ExcelOnline.Data.Repositories;
 using ExcelOnline.Data.Repositories.Implementations;
+using FileContextCore;
+using FileContextCore.FileManager;
+using FileContextCore.Serializer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -77,8 +80,27 @@ builder.Services.AddAuthentication(auth =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-               options.UseMySQL(builder.Configuration.GetConnectionString("SaleInfo") ?? string.Empty));
+var section = builder.Configuration.GetSection("ConnectionStrings").GetChildren().FirstOrDefault();
+if (section != null) 
+{
+    if (section.Key.StartsWith("MySql"))
+    {
+        builder.Services.AddDbContext<AppDbContext>(options =>
+                       options.UseMySQL(section.Value ?? string.Empty));
+    }
+    else if (section.Key.StartsWith("SqlServer")) 
+    {
+        builder.Services.AddDbContext<AppDbContext>(options =>
+                       options.UseSqlServer(section.Value ?? string.Empty, b => b.UseRowNumberForPaging()));
+    }
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options => 
+    {
+        options.UseInMemoryDatabase("SaleInfo");
+    });
+}
 
 builder.Services.AddAutoMapper(typeof(TransfersMappingProfile));
 
@@ -93,11 +115,11 @@ builder.Services.AddHttpClient();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseCors(builder =>
 {

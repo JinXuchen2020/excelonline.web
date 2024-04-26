@@ -1,5 +1,5 @@
 export interface IUserReqModel {
   name: string,
-  phoneNumber: number,
+  phoneNumber: string,
   role: string
 }

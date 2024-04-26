@@ -5,15 +5,16 @@ import {
   Space,
   Select,
 } from "antd";
+import { RuleObject } from "antd/lib/form";
+import { StoreValue } from "antd/lib/form/interface";
 import { IUserRspModel } from "models";
 import React, { FunctionComponent, useState } from "react";
-import { useNavigate } from 'react-router-dom';
 
 export const UserForm: FunctionComponent<{
+  handleValidate: any,
   handleSave: any,
-}>  = ({handleSave : save}) => {
+}>  = ({handleValidate, handleSave : save}) => {
   const [form] = Form.useForm()
-  const navigate = useNavigate();
 
   const [dataModel, setDataModel] = useState<IUserRspModel>();
 
@@ -22,6 +23,23 @@ export const UserForm: FunctionComponent<{
   const handleUpdate = (props: Partial<IUserRspModel>) => {
     setDataModel({ ...modelInstance, ...props });
   }
+
+  const validator = async (rule: RuleObject, value: StoreValue, callback: any) =>{
+    if(value) {
+      if(await handleValidate(value)) 
+      {
+        return Promise.reject('该用户手机号已存在!');
+      }
+      else 
+      {
+        return Promise.resolve();
+      }
+    }
+    else{
+      return Promise.resolve();
+    }    
+  }
+  
   const handleSave = () => {
     form.validateFields().then(() =>{
       save(dataModel);
@@ -44,7 +62,7 @@ export const UserForm: FunctionComponent<{
           wrapperCol={{ span: 10 }}
           validateTrigger={["onChange"]}
           rules={[
-            { required: true, whitespace: true, message: "请输入姓名" },
+            { required: true, whitespace: true, message: "请输入姓名" }
           ]}
         >
           <Input
@@ -56,7 +74,17 @@ export const UserForm: FunctionComponent<{
             }
           />
         </Form.Item>
-        <Form.Item label="手机号" name="phoneNumber" wrapperCol={{ span: 10 }}>
+        <Form.Item 
+          label="手机号" 
+          name="phoneNumber" 
+          wrapperCol={{ span: 10 }}
+          validateTrigger={["onblur"]}
+          rules={[
+            { required: true, whitespace: true, message: "请输入手机号" },
+            { pattern: /^1[3-9]\d{9}$/, message: "请输入正确的手机号" },
+            { validator: validator }
+          ]}
+        >
           <Input
             style={{ width: "99.5%" }}
             autoComplete="off"

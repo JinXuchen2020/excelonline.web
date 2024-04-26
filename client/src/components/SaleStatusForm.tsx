@@ -5,11 +5,39 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 
 export const SaleStatusForm : FunctionComponent<{
   form: FormInstance,
+  isDisabled: boolean,
   dataSource: ISaleStatusRspModel | undefined, 
   handleUpdate: any, 
   handleSave: any,
+  handleValidate: any
 }> 
-= ({form, dataSource, handleUpdate, handleSave}) => {
+= ({form, dataSource, handleUpdate, handleSave, handleValidate, isDisabled}) => {
+
+  const shopNameValidator = async (rule: any, value: any, callback: any) => {
+    if (value) {
+      if (await handleValidate(value,'shopName')) {
+        return Promise.reject('该店铺名或公司名已存在，请更换！');
+      }
+      else {
+        return Promise.resolve();
+      }
+    } else {
+      return Promise.resolve();
+    }
+  }
+
+  const companyNameValidator = async (rule: any, value: any, callback: any) => {
+    if (value) {
+      if (await handleValidate(value, 'companyName')) {
+        return Promise.reject('该店铺名或公司名已存在，请更换！');
+      }
+      else {
+        return Promise.resolve();
+      }
+    } else {
+      return Promise.resolve();
+    }
+  }
 
   useEffect(()=>{
     if(dataSource){
@@ -30,10 +58,10 @@ export const SaleStatusForm : FunctionComponent<{
           label="公司名称" 
           name="companyName"
           wrapperCol={{ span: 10 }}
-          validateTrigger={["onChange"]}
-          rules={[{required: true, whitespace: true, message: '请输入公司名称'}]}
+          validateTrigger={["onBlur"]}
+          rules={[{required: true, whitespace: true, message: '请输入公司名称'}, {validator: companyNameValidator}]}
         >
-          <Input style={{width: '99.5%'}} autoFocus={true} autoComplete="off" onChange ={(val: any) => handleUpdate({ companyName: val.target.value})}/>
+          <Input style={{width: '99.5%'}} disabled={isDisabled} autoFocus={true} autoComplete="off" onChange ={(val: any) => handleUpdate({ companyName: val.target.value})}/>
         </Form.Item>
         <Form.Item 
           label="品牌名称" 
@@ -46,8 +74,10 @@ export const SaleStatusForm : FunctionComponent<{
           label="店铺名称" 
           name="shopName"
           wrapperCol={{ span: 10 }}
+          validateTrigger={["onBlur"]}
+          rules={[{required: true, whitespace: true, message: '请输入店铺名称'},{validator: shopNameValidator}]}
         >
-          <Input style={{width: '99.5%'}} autoComplete="off"  onChange ={(val: any) => handleUpdate({ shopName: val.target.value})}/>
+          <Input style={{width: '99.5%'}} autoComplete="off" disabled={isDisabled}  onChange ={(val: any) => handleUpdate({ shopName: val.target.value})}/>
         </Form.Item>
         <Form.Item 
           label="业务落地仓" 

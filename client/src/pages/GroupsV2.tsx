@@ -23,6 +23,7 @@ export const GroupsV2: FunctionComponent = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [showUserModal, setShowUserModal] = useState(false);
+  const [userModel, setUserModel] = useState<IUserRspModel>();
 
   const [saleInfos, setSaleInfos] = useState<ISaleStatusListRspModel>();
 
@@ -98,10 +99,8 @@ export const GroupsV2: FunctionComponent = () => {
     );
     query.pageNo = currentPage
     query.pageSize = 10
-    const tokenString = sessionStorage.getItem(USER_PROFILE)!
-    const userToken = JSON.parse(tokenString) as ITokenRspModel
-    if (userToken.user.role !== 'admin') {
-      query.salerName = userToken.user.name
+    if (userModel && userModel.role !== 'admin') {
+      query.salerName = userModel.name
     }
     handleRefresh(query);
   }, [searchParams, currentPage]);
@@ -112,7 +111,14 @@ export const GroupsV2: FunctionComponent = () => {
         setSalerList(rsp);
       }
     });
-  }, []);
+  }, []);  
+
+  useEffect(() => {
+    const tokenString = sessionStorage.getItem(USER_PROFILE)!
+    const userToken = JSON.parse(tokenString) as ITokenRspModel
+    setUserModel(userToken.user)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   return (
     <>
@@ -132,9 +138,13 @@ export const GroupsV2: FunctionComponent = () => {
                 <Button type="primary" onClick={handleCreate}>
                   新建销售
                 </Button>
-                <Button type="primary" onClick={handleDownload}>
-                  下载数据
-                </Button>
+                {
+                  userModel && userModel.role === 'admin' && (                    
+                    <Button type="primary" onClick={handleDownload}>
+                      下载数据
+                    </Button>
+                  )
+                }
               </Space>
             </Col>
           </Row>

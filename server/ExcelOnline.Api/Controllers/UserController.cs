@@ -59,5 +59,12 @@ namespace ExcelOnline.Api.Controllers
             return Ok();
         }
 
+        [HttpPost("users/validate")]
+        public async Task<ActionResult<bool>> ValidateUser([FromBody] UserQueryOption option)
+        {
+            var result = await this.userService.ValidateUser(option);
+            return Ok(result);
+        }
+
     }
 }

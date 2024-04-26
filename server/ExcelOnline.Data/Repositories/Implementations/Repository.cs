@@ -12,6 +12,7 @@ namespace ExcelOnline.Data.Repositories.Implementations
         public Repository(AppDbContext context)
         {
             Context = context;
+            context.Database.EnsureCreated();
         }
 
         public async Task UseTransactionAsync(Func<Task> operation)

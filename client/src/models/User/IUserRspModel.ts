@@ -1,6 +1,6 @@
 export interface IUserRspModel {
   id: string,
   name: string,
-  phoneNumber: number,
+  phoneNumber: string,
   role: string
 }

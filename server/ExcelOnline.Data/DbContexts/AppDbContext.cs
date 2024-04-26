@@ -25,6 +25,13 @@ namespace ExcelOnline.Data.DbContexts
                     .Property(u => u.Id)
                     .UseIdentityColumn()
                     .ValueGeneratedOnAdd();
+            builder.Entity<User>().HasData(new User
+            {
+                Id = 1,
+                Name = "管理员",
+                PhoneNumber = "1234567",
+                Role = "admin"
+            });
             builder.Entity<SaleStatus>()
                     .Property(u => u.Id)
                     .UseIdentityColumn()

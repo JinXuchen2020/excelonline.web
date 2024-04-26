@@ -46,6 +46,17 @@ export const Users: React.FunctionComponent = () => {
     }   
   }
 
+  const handleValidate = async (data: string) => {
+    if(data) {
+      const input : Partial<IUserQueryOption> = {
+        phoneNumber: data,
+      }
+
+      var result = await UserService.validateUser(input);
+      return result;
+    }   
+  }
+
   const refresh = (query: Partial<IUserQueryOption>) => {
     setIsLoading(true);
     setLoadingTip("加载用户...");
@@ -113,7 +124,7 @@ export const Users: React.FunctionComponent = () => {
         footer={(null)} 
         onCancel={()=> setShowUserModal(false)}
       >
-        <UserForm handleSave={handleSave} />
+        <UserForm handleSave={handleSave} handleValidate={handleValidate} />
       </Modal>
     </>
   );

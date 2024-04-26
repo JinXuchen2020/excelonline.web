@@ -8,6 +8,7 @@ const Api = {
   addSaleStatus: (input: ISaleStatusReqModel) => ({ method: "POST", url: `saleInfos`, body: input} as IFetchProps),
   updateSaleStatus: (id: string, input: ISaleStatusReqModel) => ({ method: "PUT", url: `saleInfos/${id}`, body: input} as IFetchProps),
   deleteSaleStatus: (id: string) => ({ method: "DELETE", url:  `saleInfos/${id}`} as IFetchProps), 
+  validateSaleStatus: (input: Partial<IGroupQueryOption>) => ({ method: "POST", url: `saleInfos/validate`, body: input } as IFetchProps),
 
   downloadSaleInfos: () => ({ method: "DOWNLOAD", url: 'saleInfos/download'} as IFetchProps),
 }
@@ -18,6 +19,7 @@ export const SaleInfoService = {
   addSaleStatus: async (input: ISaleStatusReqModel) => $fetch(Api.addSaleStatus(input)),
   updateSaleStatus: async (id: string, input: ISaleStatusReqModel) => $fetch(Api.updateSaleStatus(id, input)),
   deleteSaleStatus: async (id: string) => $fetch(Api.deleteSaleStatus(id)),
+  validateSaleStatus: (input: Partial<IGroupQueryOption>) => $fetch<boolean>(Api.validateSaleStatus(input)),
 
   downloadSaleInfos: async () => $fetch<Blob>(Api.downloadSaleInfos()),
 }

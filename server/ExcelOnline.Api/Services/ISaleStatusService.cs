@@ -10,5 +10,7 @@ namespace ExcelOnline.Api.Services
         Task AddSaleStatus(SaleStatus input);
         Task UpdateSaleStatus(SaleStatus input);
         Task DeleteSaleStatus(int id);
+
+        Task<bool> ValidateSaleStatus(SaleQueryOption option);
     }    
 }

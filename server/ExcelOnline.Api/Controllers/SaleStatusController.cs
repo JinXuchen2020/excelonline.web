@@ -85,5 +85,12 @@ namespace ExcelOnline.Api.Controllers
 
             return File(fileResult, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "销售报备.xlsx");
         }
+
+        [HttpPost("saleInfos/validate")]
+        public async Task<ActionResult<bool>> ValidateSaleStatus([FromBody] SaleQueryOption option)
+        {
+            var result = await this.saleStatusService.ValidateSaleStatus(option);
+            return Ok(result);
+        }
     }
 }

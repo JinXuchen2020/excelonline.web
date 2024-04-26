@@ -11,7 +11,7 @@ namespace ExcelOnline.Data.Migrations
             migrationBuilder.AddColumn<bool>(
                 name: "IsEditing",
                 table: "SaleStatus",
-                type: "tinyint(1)",
+                type: "tinyint",
                 nullable: false,
                 defaultValue: false);
         }

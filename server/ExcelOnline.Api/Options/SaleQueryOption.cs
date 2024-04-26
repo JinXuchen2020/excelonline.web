@@ -6,6 +6,8 @@ namespace ExcelOnline.Api.Options
     {
         public string? CompanyName { get; set; }
 
+        public string? ShopName { get; set; }
+
         public string? SalerName { get; set; }  
     }
 }

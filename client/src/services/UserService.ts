@@ -9,6 +9,7 @@ const Api = {
   putUser: (id: string, user: IUserReqModel) => ({ method: "PUT", url: `users/${id}`, body: user } as IFetchProps), 
   addUser: (user: IUserReqModel) => ({ method: "POST", url: `users`, body: user } as IFetchProps), 
   getSalerList: () => ({ method: "GET", url: `users/salerlist` } as IFetchProps), 
+  validateUser: (user: Partial<IUserQueryOption>) => ({ method: "POST", url: `users/validate`, body: user } as IFetchProps),
 }
 
 export const UserService = {
@@ -17,6 +18,8 @@ export const UserService = {
   putUser: async (userId: string, user: IUserReqModel) => $fetch(Api.putUser(userId, user)),
   addUser: async (user: IUserReqModel) => $fetch(Api.addUser(user)),  
   getSalerList: async () => $fetch<IUserRspModel[]>(Api.getSalerList()), 
+  validateUser: (user: Partial<IUserQueryOption>) => $fetch<boolean>(Api.validateUser(user)),
+      
 
   setErrorHandler: () => {
     const handler : (err: any) => void = (err: any) => {

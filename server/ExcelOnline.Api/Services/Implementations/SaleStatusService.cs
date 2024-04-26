@@ -67,5 +67,24 @@ namespace ExcelOnline.Api.Services.Implementations
                 await this.repository.RemoveAsync(result);
             }
         }
+
+        public async Task<bool> ValidateSaleStatus(SaleQueryOption option)
+        {
+            var result = this.repository.GetQuery<SaleStatus>();
+            if (!string.IsNullOrEmpty(option.CompanyName) && string.IsNullOrEmpty(option.ShopName))
+            {
+                result = result.Where(c => c.CompanyName == option.CompanyName);
+            }
+            else if (string.IsNullOrEmpty(option.CompanyName) && !string.IsNullOrEmpty(option.ShopName))
+            {
+                result = result.Where(c => c.ShopName == option.ShopName);
+            }
+            else
+            {
+                result = result.Where(c => c.CompanyName == option.CompanyName || c.ShopName == option.ShopName);
+            }
+
+            return (await result.FirstOrDefaultAsync()) != null;
+        }
     }
 }

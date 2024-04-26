@@ -11,5 +11,7 @@ namespace ExcelOnline.Api.Services
         Task<User?> GetUserByPhone(string phoneNumber);
 
         Task AddUser(User input);
+
+        Task<bool> ValidateUser(UserQueryOption option);
     }
 }

@@ -1,6 +1,6 @@
 import { Button, Col, Form, Row } from 'antd';
 import { SaleStatusForm, SaleStatusTable, Loading } from 'components';
-import { ISaleStatusReqModel,  ISaleStatusRspModel, isOfType, IUserRspModel } from 'models';
+import { IGroupQueryOption, ISaleStatusReqModel,  ISaleStatusRspModel, isOfType, ITokenRspModel, IUserRspModel, USER_PROFILE } from 'models';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { SaleInfoService, UserService } from 'services';
@@ -15,6 +15,7 @@ export const GroupManage : FunctionComponent = () => {
   const [form] = Form.useForm()
 
   const [dataModel, setDataModel] = useState<ISaleStatusRspModel>();
+  const [userModel, setUserModel] = useState<IUserRspModel>();
 
   const [pageFlag, setPageFlag] = useState<Flag>("Base");  
 
@@ -46,6 +47,11 @@ export const GroupManage : FunctionComponent = () => {
           })
         }
         else {
+          const tokenString = sessionStorage.getItem(USER_PROFILE)!
+          const userToken = JSON.parse(tokenString) as ITokenRspModel
+          if (userToken.user.role !== 'admin') {
+            input.salerName = userToken.user.name
+          }
           SaleInfoService.addSaleStatus(input).then(()=> {
             setIsLoading(false)
             navigate("/saleInfos")
@@ -55,6 +61,38 @@ export const GroupManage : FunctionComponent = () => {
     })
     .catch(() => {
     })    
+  }
+
+  const handleValidate = async(data: string, propName: string) => {
+    var result = false;
+    if(userModel) 
+    {
+      if (!id && userModel.role !== 'admin') {
+        if (data) {
+          let input : Partial<IGroupQueryOption> = {};
+          if(propName === 'companyName') 
+          {
+            input.companyName = data;
+            if(dataModel?.shopName) 
+            {
+              input.shopName = dataModel.shopName;
+            }
+          }
+          else if(propName === 'shopName') 
+          {
+            input.shopName = data;
+            if(dataModel?.companyName) 
+            {
+              input.companyName = dataModel.companyName;
+            }
+          }
+
+          result =await SaleInfoService.validateSaleStatus(input)
+        }
+      }
+    }   
+  
+    return result;       
   }
 
   const handleBack = () => {
@@ -96,15 +134,25 @@ export const GroupManage : FunctionComponent = () => {
     }
   }, [id])
 
+  useEffect(() => {
+    const tokenString = sessionStorage.getItem(USER_PROFILE)!
+    const userToken = JSON.parse(tokenString) as ITokenRspModel
+    setUserModel(userToken.user)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
   return (
     <>
       <Loading loading={isLoading} spinTip={loadingTip} />
       <Button type="text" icon ={<LeftOutlined />} onClick={handleBack}>{backBtnLabel()}</Button>
       <SaleStatusForm 
-        form={form}
+        form={form} 
+        isDisabled = { id && userModel?.role !== 'admin' ? true : false }
         dataSource ={dataModel} 
         handleUpdate={handleUpdate}
-        handleSave={handleSave} />
+        handleSave={handleSave}
+        handleValidate={handleValidate}
+      />
     </>
   );
 }

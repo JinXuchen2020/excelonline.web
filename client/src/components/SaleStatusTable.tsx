@@ -1,6 +1,6 @@
 import { Button, Space, Table } from "antd"
-import React, { FunctionComponent } from "react";
-import { ISaleStatusListRspModel, ISaleStatusRspModel, IUserRspModel } from "models";
+import React, { FunctionComponent, useEffect, useState } from "react";
+import { ISaleStatusListRspModel, ISaleStatusRspModel, ITokenRspModel, IUserRspModel, USER_PROFILE } from "models";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 
@@ -11,7 +11,8 @@ export const SaleStatusTable : FunctionComponent<{
   handlePageChange: any;
   currentPage: number;
 }> 
-= ({dataSource, currentPage, loading, handleSelect, handlePageChange}) => {  
+= ({dataSource, currentPage, loading, handleSelect, handlePageChange}) => {
+  const [userModel, setUserModel] = useState<IUserRspModel>();
   const columns : ColumnsType<ISaleStatusRspModel> = [
     {
       title: '对接销售',
@@ -143,7 +144,7 @@ export const SaleStatusTable : FunctionComponent<{
     },
     {
       title: "",
-      width: 120,
+      width: userModel?.role === "admin" ? 120 : 60,
       key: "action",
       fixed: "right",
       render: (text, record) => (
@@ -155,19 +156,30 @@ export const SaleStatusTable : FunctionComponent<{
           >
             查看
           </Button>
-          <Button
-            size="small"
-            type="primary"
-            disabled={record.isEditing } // || record.salerName?.length > 0 } 
-            onClick={() => handleSelect(record, "assign")}
-          >
-            分配
-          </Button>
-        </Space>
-        
+          {
+            userModel?.role === "admin" && (
+              <Button
+                size="small"
+                type="primary"
+                
+                disabled={record.isEditing } // || record.salerName?.length > 0 } 
+                onClick={() => handleSelect(record, "assign")}
+              >
+                分配
+              </Button>
+            )
+          }
+        </Space>        
       ),
     }
   ]
+
+  useEffect(() => {
+    const tokenString = sessionStorage.getItem(USER_PROFILE)!
+    const userToken = JSON.parse(tokenString) as ITokenRspModel
+    setUserModel(userToken.user)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
 
   return (
     <>
