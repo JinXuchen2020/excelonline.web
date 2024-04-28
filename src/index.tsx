@@ -5,7 +5,7 @@ import { Main,  Home,  Users,  Login,  GroupsV2, GroupManage } from './pages';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 ReactDOM.render(
-  <BrowserRouter>
+  <BrowserRouter basename={process.env.PUBLIC_URL}>
     <Routes>
       <Route path="login" element={
         <Login />
