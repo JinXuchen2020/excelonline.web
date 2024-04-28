@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/excelonline.web/static/css/main.ac54d9db.css",
-    "main.js": "/excelonline.web/static/js/main.128faecd.js",
-    "static/js/453.c8d12d9d.chunk.js": "/excelonline.web/static/js/453.c8d12d9d.chunk.js",
-    "index.html": "/excelonline.web/index.html",
-    "main.ac54d9db.css.map": "/excelonline.web/static/css/main.ac54d9db.css.map",
-    "main.128faecd.js.map": "/excelonline.web/static/js/main.128faecd.js.map",
-    "453.c8d12d9d.chunk.js.map": "/excelonline.web/static/js/453.c8d12d9d.chunk.js.map"
+    "main.css": "https://jinxuchen2020.github.io/excelonline.web/static/css/main.ac54d9db.css",
+    "main.js": "https://jinxuchen2020.github.io/excelonline.web/static/js/main.1088bfdb.js",
+    "static/js/453.c8d12d9d.chunk.js": "https://jinxuchen2020.github.io/excelonline.web/static/js/453.c8d12d9d.chunk.js",
+    "index.html": "https://jinxuchen2020.github.io/excelonline.web/index.html",
+    "main.ac54d9db.css.map": "https://jinxuchen2020.github.io/excelonline.web/static/css/main.ac54d9db.css.map",
+    "main.1088bfdb.js.map": "https://jinxuchen2020.github.io/excelonline.web/static/js/main.1088bfdb.js.map",
+    "453.c8d12d9d.chunk.js.map": "https://jinxuchen2020.github.io/excelonline.web/static/js/453.c8d12d9d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ac54d9db.css",
-    "static/js/main.128faecd.js"
+    "static/js/main.1088bfdb.js"
   ]
 }
