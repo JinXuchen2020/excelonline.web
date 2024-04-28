@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "./static/css/main.ac54d9db.css",
-    "main.js": "./static/js/main.0f43f8c5.js",
-    "static/js/453.c8d12d9d.chunk.js": "./static/js/453.c8d12d9d.chunk.js",
-    "index.html": "./index.html",
-    "main.ac54d9db.css.map": "./static/css/main.ac54d9db.css.map",
-    "main.0f43f8c5.js.map": "./static/js/main.0f43f8c5.js.map",
-    "453.c8d12d9d.chunk.js.map": "./static/js/453.c8d12d9d.chunk.js.map"
+    "main.css": "/excelonline.web/static/css/main.ac54d9db.css",
+    "main.js": "/excelonline.web/static/js/main.dc9664c2.js",
+    "static/js/453.c8d12d9d.chunk.js": "/excelonline.web/static/js/453.c8d12d9d.chunk.js",
+    "index.html": "/excelonline.web/index.html",
+    "main.ac54d9db.css.map": "/excelonline.web/static/css/main.ac54d9db.css.map",
+    "main.dc9664c2.js.map": "/excelonline.web/static/js/main.dc9664c2.js.map",
+    "453.c8d12d9d.chunk.js.map": "/excelonline.web/static/js/453.c8d12d9d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ac54d9db.css",
-    "static/js/main.0f43f8c5.js"
+    "static/js/main.dc9664c2.js"
   ]
 }
