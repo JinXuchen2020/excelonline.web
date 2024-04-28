@@ -4,11 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-/*/*/bin
-/*/*/obj
-/*/*/.vs
-/*/*/Properties
-/*/*/*.user
 
 # testing
 /coverage

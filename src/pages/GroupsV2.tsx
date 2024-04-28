@@ -136,7 +136,7 @@ export const GroupsV2: FunctionComponent = () => {
             <Col span={6}>
               <Space style={{ float: "right" }}>
                 <Button type="primary" onClick={handleCreate}>
-                  新建销售
+                  新建客户信息
                 </Button>
                 {
                   userModel && userModel.role === 'admin' && (                    
