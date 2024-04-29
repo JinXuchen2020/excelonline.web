@@ -55,7 +55,7 @@ export const SaleStatusTable : FunctionComponent<{
       fixed: 'left',
     },
     {
-      title: '客户成交可能性',
+      title: '成交可行性',
       dataIndex: 'successfulRate',
       key: 'successfulRate',
       ellipsis: true,
