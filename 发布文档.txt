@@ -1,0 +1,7 @@
+1. 安装IIS URL Rewrite 模块 - 解决URL重写问题
+    安装包：rewrite_amd64_en-US.msi
+    在public 文件夹下添加文件：web.config
+2. 发布到github pages
+    安装依赖：gh-pages
+    添加脚本："predeploy": "npm run build",  "deploy": "gh-pages -d build"
+    修改PUBLIC_URL=/{gitbub repo name}
